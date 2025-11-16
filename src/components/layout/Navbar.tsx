@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Bell, User, LogOut, Menu } from 'lucide-react';
 import { getCurrentUser, setCurrentUser } from '@/mocks/usuarios';
 import socketService from '@/services/socket';
+import alertaIcon from '@/assets/alerta.png';
 
 interface NavbarProps {
   onMenuClick?: () => void;
@@ -59,7 +60,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, onSearch }) => {
         
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#E05A29' }}>
-            <span className="text-white font-bold text-sm">AU</span>
+            <img 
+              src={alertaIcon} 
+              alt="Alerta UTEC" 
+              className="w-6 h-6 object-contain"
+            />
           </div>
           <span className="font-semibold hidden sm:inline" style={{ color: '#F2ECEC' }}>Alerta UTEC</span>
         </div>
