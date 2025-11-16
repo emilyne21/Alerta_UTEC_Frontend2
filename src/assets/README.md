@@ -23,3 +23,4 @@ import loginImage from '../assets/login-image.jpg';
 **Nota:** Vite procesa estas imágenes y puede optimizarlas en el build.
 
 
+

@@ -8,6 +8,7 @@ import { SupervisorReports } from './pages/supervisor/SupervisorReports';
 import { WorkerDashboard } from './pages/worker/WorkerDashboard';
 import { PendingQueue } from './pages/worker/PendingQueue';
 import { MyCases } from './pages/worker/MyCases';
+import { WorkerHistory } from './pages/worker/WorkerHistory';
 
 // Páginas placeholder
 const SupervisorUsers = () => (
@@ -33,24 +34,6 @@ const SupervisorConfig = () => (
     </div>
   </div>
 );
-
-// WorkerHistory: página de historial sin ID específico
-// Redirige a una página de selección o muestra mensaje
-const WorkerHistory = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Historial</h1>
-      <p className="text-gray-600 mb-6">
-        Selecciona un incidente para ver su historial completo desde el panel de detalle.
-      </p>
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          Para ver el historial de un incidente, abre el panel de detalle y haz clic en "Ver historial completo".
-        </p>
-      </div>
-    </div>
-  );
-};
 
 // Componente de protección de rutas
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {

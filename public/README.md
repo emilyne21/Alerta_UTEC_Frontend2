@@ -20,3 +20,4 @@ Esta carpeta es para **imágenes y assets estáticos** que se referencian direct
 **Nota:** Las imágenes en `public/` se copian tal cual al build final.
 
 
+
