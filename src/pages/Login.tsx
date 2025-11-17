@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
 import { setCurrentUser } from '../mocks/usuarios';
-import { AlertCircle, User, Shield, Sparkles, Lock, Wrench, Phone, Mail, MapPin, Loader2 } from 'lucide-react';
+import { AlertCircle, User, Shield, Phone, Mail, MapPin, Loader2 } from 'lucide-react';
 import { UserRole, WorkerArea } from '../utils/types';
 import seguridadImage from '../assets/seguridad.png';
 import alertaImage from '../assets/alerta.png';
@@ -23,7 +23,6 @@ export const Login = () => {
   const [registrationCode, setRegistrationCode] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole>('trabajador');
-  const [selectedArea, setSelectedArea] = useState<WorkerArea>('TI');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,11 +139,6 @@ export const Login = () => {
       return;
     }
 
-    if (selectedRole === 'trabajador' && !selectedArea) {
-      setError('Por favor selecciona un área');
-      return;
-    }
-
     if (registerPassword.length < 6) {
       setError('La contraseña debe tener al menos 6 caracteres');
       return;
@@ -162,10 +156,6 @@ export const Login = () => {
         registrationCode: registrationCode.trim(),
       };
 
-      // Si es trabajador, agregar el área
-      if (selectedRole === 'trabajador') {
-        registerData.area = selectedArea;
-      }
 
       const response = await apiClient.post('/auth/register', registerData);
 
@@ -180,7 +170,6 @@ export const Login = () => {
         setRegisterPassword('');
         setRegistrationCode('');
         setSelectedRole('trabajador');
-        setSelectedArea('TI');
 
         // Pre-llenar el email en el formulario de login
         setEmail(registerEmail.trim());
@@ -446,7 +435,6 @@ export const Login = () => {
             setRegisterPassword('');
             setRegistrationCode('');
             setSelectedRole('trabajador');
-            setSelectedArea('TI');
             setError('');
           }
         }}
@@ -537,7 +525,6 @@ export const Login = () => {
                 type="button"
                 onClick={() => {
                   setSelectedRole('trabajador');
-                  setSelectedArea('TI');
                 }}
                 className={`p-4 border-2 rounded-lg transition-all ${
                   selectedRole === 'trabajador'
@@ -578,66 +565,6 @@ export const Login = () => {
             </div>
           </div>
 
-          {/* Selección de área (solo para trabajadores) */}
-          {selectedRole === 'trabajador' && (
-            <div>
-              <label className="block text-sm font-medium text-[#3d3d5c] mb-3">
-                Selecciona tu área
-              </label>
-              <div className="grid grid-cols-3 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSelectedArea('limpieza')}
-                  className={`p-4 border-2 rounded-lg transition-all ${
-                    selectedArea === 'limpieza'
-                      ? 'border-[#6a5acd] bg-[#f0edff]'
-                      : 'border-[#dcd6ff] hover:border-[#6a5acd]'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Sparkles size={28} className={selectedArea === 'limpieza' ? 'text-[#6a5acd]' : 'text-[#b8b0e0]'} />
-                    <span className={`text-sm font-medium ${selectedArea === 'limpieza' ? 'text-[#5a4acd]' : 'text-[#3d3d5c]'}`}>
-                      Limpieza
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedArea('TI')}
-                  className={`p-4 border-2 rounded-lg transition-all ${
-                    selectedArea === 'TI'
-                      ? 'border-[#6a5acd] bg-[#f0edff]'
-                      : 'border-[#dcd6ff] hover:border-[#6a5acd]'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Wrench size={28} className={selectedArea === 'TI' ? 'text-[#6a5acd]' : 'text-[#b8b0e0]'} />
-                    <span className={`text-sm font-medium ${selectedArea === 'TI' ? 'text-[#5a4acd]' : 'text-[#3d3d5c]'}`}>
-                      TI
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedArea('seguridad')}
-                  className={`p-4 border-2 rounded-lg transition-all ${
-                    selectedArea === 'seguridad'
-                      ? 'border-[#6a5acd] bg-[#f0edff]'
-                      : 'border-[#dcd6ff] hover:border-[#6a5acd]'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <Lock size={28} className={selectedArea === 'seguridad' ? 'text-[#6a5acd]' : 'text-[#b8b0e0]'} />
-                    <span className={`text-sm font-medium ${selectedArea === 'seguridad' ? 'text-[#5a4acd]' : 'text-[#3d3d5c]'}`}>
-                      Seguridad
-                    </span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          )}
 
           <div className="flex gap-3 pt-4">
             <Button
@@ -651,7 +578,6 @@ export const Login = () => {
                   setRegisterPassword('');
                   setRegistrationCode('');
                   setSelectedRole('trabajador');
-                  setSelectedArea('TI');
                   setError('');
                 }
               }}
