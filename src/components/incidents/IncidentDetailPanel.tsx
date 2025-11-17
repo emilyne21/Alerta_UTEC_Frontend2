@@ -1,14 +1,15 @@
 // src/components/incidents/IncidentDetailPanel.tsx
-import { X } from 'lucide-react';
-import { Incident } from '@/utils/types';
+import { X, Loader2 } from 'lucide-react';
+import { Incident, TimelineEvent } from '@/utils/types';
 import { StatusBadge, UrgencyBadge, TypeBadge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { IncidentTimeline } from './IncidentTimeline';
 import { generateTimeline } from '@/mocks/incidentes';
 import { format } from 'date-fns';
 import es from 'date-fns/locale/es';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ConfirmDialog } from '../common/ConfirmDialog';
+import apiClient from '@/services/api';
 
 interface IncidentDetailPanelProps {
   incident: Incident | null;
@@ -27,10 +28,74 @@ export const IncidentDetailPanel: React.FC<IncidentDetailPanelProps> = ({
 }) => {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+
+  // Cargar historial desde el endpoint cuando el panel se abre
+  useEffect(() => {
+    if (!incident || !isOpen) {
+      setTimeline([]);
+      return;
+    }
+
+    // Si es supervisor o trabajador, cargar desde el endpoint
+    if (userRole === 'supervisor' || userRole === 'trabajador') {
+      const fetchHistory = async () => {
+        setIsLoadingHistory(true);
+        try {
+          const response = await apiClient.get(`/incidentes/${incident.id}/historial`);
+          
+          // Normalizar los eventos del historial
+          let historyData = response.data;
+          if (!Array.isArray(historyData)) {
+            if (historyData.data && Array.isArray(historyData.data)) {
+              historyData = historyData.data;
+            } else if (historyData.historial && Array.isArray(historyData.historial)) {
+              historyData = historyData.historial;
+            } else if (historyData.events && Array.isArray(historyData.events)) {
+              historyData = historyData.events;
+            } else {
+              console.warn('Formato de respuesta inesperado para historial:', historyData);
+              historyData = [];
+            }
+          }
+
+          const timelineEvents: TimelineEvent[] = historyData.map((event: any, index: number) => {
+            try {
+              return {
+                id: event.id || event._id || `hist-${incident.id}-${index}`,
+                tipo: (event.tipo || event.type || 'comentario') as TimelineEvent['tipo'],
+                usuario: event.usuario || event.user || event.usuario_nombre || 'Sistema',
+                descripcion: event.descripcion || event.description || event.mensaje || '',
+                fecha: event.fecha ? new Date(event.fecha) : (event.fecha_evento ? new Date(event.fecha_evento) : (event.createdAt ? new Date(event.createdAt) : new Date())),
+                metadata: event.metadata || event.metadatos || {},
+              };
+            } catch (mapError) {
+              console.error(`Error mapping history event at index ${index}:`, mapError, event);
+              return null;
+            }
+          }).filter((event: TimelineEvent | null) => event !== null) as TimelineEvent[];
+
+          // Ordenar eventos por fecha
+          timelineEvents.sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
+          setTimeline(timelineEvents);
+        } catch (err: any) {
+          console.error('Error al cargar historial del incidente:', err);
+          // Si falla, usar el timeline generado localmente como fallback
+          setTimeline(generateTimeline(incident));
+        } finally {
+          setIsLoadingHistory(false);
+        }
+      };
+
+      fetchHistory();
+    } else {
+      // Para otros roles, usar el timeline generado localmente
+      setTimeline(generateTimeline(incident));
+    }
+  }, [incident, isOpen, userRole]);
 
   if (!incident || !isOpen) return null;
-
-  const timeline = generateTimeline(incident);
 
   const handleAction = (action: string) => {
     setPendingAction(action);
@@ -212,7 +277,14 @@ export const IncidentDetailPanel: React.FC<IncidentDetailPanelProps> = ({
           {/* Timeline */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Historial</h3>
-            {timeline.length > 0 ? (
+            {isLoadingHistory ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-center">
+                  <Loader2 className="animate-spin h-8 w-8 text-primary-600 mx-auto mb-2" />
+                  <p className="text-gray-600 text-sm">Cargando historial...</p>
+                </div>
+              </div>
+            ) : timeline.length > 0 ? (
               <IncidentTimeline events={timeline} />
             ) : (
               <div className="text-center py-8 text-gray-500">

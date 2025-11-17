@@ -5,35 +5,12 @@ import { AppLayout } from './components/layout/AppLayout';
 import { Login } from './pages/Login';
 import { SupervisorDashboard } from './pages/supervisor/SupervisorDashboard';
 import { SupervisorReports } from './pages/supervisor/SupervisorReports';
+import { SupervisorUsers } from './pages/supervisor/SupervisorUsers';
+import { SupervisorHistory } from './pages/supervisor/SupervisorHistory';
 import { WorkerDashboard } from './pages/worker/WorkerDashboard';
 import { PendingQueue } from './pages/worker/PendingQueue';
 import { MyCases } from './pages/worker/MyCases';
 import { WorkerHistory } from './pages/worker/WorkerHistory';
-
-// Páginas placeholder
-const SupervisorUsers = () => (
-  <div>
-    <h1 className="text-3xl font-bold text-gray-900 mb-2">Gestión de Usuarios</h1>
-    <p className="text-gray-600">Vista de usuarios (UI placeholder)</p>
-    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <p className="text-sm text-blue-800">
-        Esta página está en construcción. Aquí se mostraría la gestión de usuarios.
-      </p>
-    </div>
-  </div>
-);
-
-const SupervisorConfig = () => (
-  <div>
-    <h1 className="text-3xl font-bold text-gray-900 mb-2">Configuración</h1>
-    <p className="text-gray-600">Configuración del sistema (UI placeholder)</p>
-    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-      <p className="text-sm text-blue-800">
-        Esta página está en construcción. Aquí se mostraría la configuración del sistema.
-      </p>
-    </div>
-  </div>
-);
 
 // Componente de protección de rutas
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -141,10 +118,10 @@ function App() {
           }
         />
         <Route
-          path="/supervisor/config"
+          path="/supervisor/historial"
           element={
             <ProtectedRoute>
-              <SupervisorConfig />
+              <SupervisorHistory />
             </ProtectedRoute>
           }
         />

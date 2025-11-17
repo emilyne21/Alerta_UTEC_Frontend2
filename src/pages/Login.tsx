@@ -240,30 +240,30 @@ export const Login = () => {
 
   return (
     <div className="login-container">
-      <div className="max-w-6xl mx-auto px-5 py-10 relative z-10 flex-1">
+      <div className="max-w-5xl mx-auto px-5 py-6 relative z-10 flex-1">
         {/* Contenido Principal - Dos Columnas */}
-        <main className="flex flex-wrap items-start gap-8 mb-12">
+        <main className="flex flex-wrap items-start gap-6 mb-6">
           {/* Columna Izquierda: Información */}
-          <div className="flex-1 min-w-[300px] px-5">
-            <h2 className="text-4xl md:text-5xl font-semibold text-[#3d3d5c] mb-4 font-montserrat slide-in-left">
+          <div className="flex-1 min-w-[300px] px-4">
+            <h2 className="text-3xl md:text-4xl font-semibold text-[#3d3d5c] mb-3 font-montserrat slide-in-left">
               ¡Bienvenido a <span className="text-[#6a5acd]"><span className="blink-animation">Alerta</span> UTEC</span>!
             </h2>
-            <p className="text-lg text-[#555] mb-3 leading-relaxed pop-up">
+            <p className="text-base text-[#555] mb-2 leading-relaxed pop-up">
               Sistema de gestión de incidentes para la Universidad de Ingeniería y Tecnología.
               Accede para gestionar, supervisar y resolver incidentes de manera eficiente.
             </p>
-            <p className="text-lg text-[#6a5acd] font-medium mb-8">
+            <p className="text-base text-[#6a5acd] font-medium mb-4">
               ¡Esperamos verte pronto!
             </p>
             
             {/* Imagen de seguridad con fondo morado */}
-            <div className="mt-12 mb-8 max-w-[90%] relative overflow-visible">
+            <div className="mt-6 mb-4 max-w-[90%] relative overflow-visible">
               {/* Fondo morado */}
               <img 
                 src={fondoMoradoImage} 
                 alt="" 
                 className="h-auto object-contain absolute z-0"
-                style={{ width: '150%', height: 'auto', left: '-80px', bottom: '-180px' }}
+                style={{ width: '150%', height: 'auto', left: '-180px', bottom: '-180px' }}
               />
               {/* Imagen de seguridad delante */}
               <img 
@@ -275,7 +275,7 @@ export const Login = () => {
             </div>
 
             {/* Icono Social - Instagram */}
-            <div className="flex gap-3 mt-10">
+            <div className="flex gap-3 mt-4">
               <a 
                 href="https://instagram.com" 
                 target="_blank"
@@ -291,21 +291,21 @@ export const Login = () => {
           </div>
 
           {/* Columna Derecha: Formulario */}
-          <div className="flex-1 min-w-[300px] px-5 relative z-10">
-            <div className="bg-[#fdfdff] rounded-lg p-8 shadow-sm">
-              <div className="text-center mb-8">
-                <div className="w-16 h-16 bg-[#6a5acd] rounded-xl flex items-center justify-center mx-auto mb-4">
+          <div className="flex-1 min-w-[300px] px-4 relative z-10">
+            <div className="bg-[#fdfdff] rounded-lg p-6 shadow-sm">
+              <div className="text-center mb-6">
+                <div className="w-14 h-14 bg-[#6a5acd] rounded-xl flex items-center justify-center mx-auto mb-3">
                   <img 
                     src={alertaImage} 
                     alt="Alerta UTEC" 
-                    className="h-10 w-auto object-contain"
+                    className="h-8 w-auto object-contain"
                   />
                 </div>
-                <h1 className="text-2xl font-bold text-[#3d3d5c] mb-2 font-montserrat">Iniciar Sesión</h1>
-                <p className="text-[#555]">Accede a tu cuenta</p>
+                <h1 className="text-xl font-bold text-[#3d3d5c] mb-1 font-montserrat">Iniciar Sesión</h1>
+                <p className="text-sm text-[#555]">Accede a tu cuenta</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-[#555] mb-2">
                     Correo electrónico:
@@ -354,11 +354,33 @@ export const Login = () => {
                   </div>
                 )}
 
-                <div className="flex justify-end">
+                <div className="w-full space-y-3">
+                  <button
+                    type="button"
+                    className="w-full bg-white text-gray-700 font-semibold text-base border border-gray-300 px-6 py-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-50 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Iniciar sesión con Google
+                  </button>
+                  
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-[#fdfdff] text-gray-500">O</span>
+                    </div>
+                  </div>
+
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="bg-[#6a5acd] text-white font-semibold text-base border-none px-6 py-3 rounded-lg cursor-pointer transition-colors hover:bg-[#5a4acd] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="w-full bg-[#6a5acd] text-white font-semibold text-base border-none px-6 py-3 rounded-lg cursor-pointer transition-colors hover:bg-[#5a4acd] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
                     {isLoading && <Loader2 size={18} className="animate-spin" />}
                     {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
@@ -366,38 +388,19 @@ export const Login = () => {
                 </div>
               </form>
 
-              <div className="mt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full border-[#6a5acd] text-[#6a5acd] hover:bg-[#6a5acd] hover:text-white transition-colors duration-200"
-                  onClick={() => setShowRegisterModal(true)}
-                >
-                  Regístrate
-                </Button>
+              <div className="mt-4 text-center">
+                <p className="text-sm text-[#555]">
+                  ¿Aún no tienes cuenta?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setShowRegisterModal(true)}
+                    className="text-[#6a5acd] font-medium hover:underline"
+                  >
+                    Regístrate aquí
+                  </button>
+                </p>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <p className="text-sm text-[#555] text-center mb-4">
-                  Acceso rápido para preview (solo UI):
-                </p>
-                <div className="space-y-3">
-                  <Button
-                    variant="outline"
-                    className="w-full border-[#6a5acd] text-[#6a5acd] hover:bg-[#f0edff]"
-                    onClick={() => handleQuickLogin('maria.gonzalez@utec.edu.pe')}
-                  >
-                    Entrar como Supervisor
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-[#6a5acd] text-[#6a5acd] hover:bg-[#f0edff]"
-                    onClick={() => handleQuickLogin('carlos.ramirez@utec.edu.pe')}
-                  >
-                    Entrar como Trabajador
-                  </Button>
-                </div>
-              </div>
             </div>
           </div>
         </main>
@@ -405,29 +408,29 @@ export const Login = () => {
       </div>
 
       {/* Footer - Full Width */}
-      <footer className="w-full bg-[#3d3d5c] mt-auto relative z-10" style={{ marginTop: 'auto' }}>
-        <div className="max-w-6xl mx-auto px-5 py-10">
-          <div className="flex flex-wrap justify-around gap-8">
-            <div className="min-w-[250px] text-gray-200">
-              <h3 className="text-white mb-5 font-semibold text-lg font-montserrat">Oficina Principal:</h3>
-              <ul className="space-y-3">
+      <footer className="w-full bg-[#3d3d5c] mt-auto relative z-10" style={{ marginTop: 'auto', paddingBottom: '2rem' }}>
+        <div className="max-w-5xl mx-auto px-5 py-6">
+          <div className="flex flex-wrap justify-around gap-6">
+            <div className="min-w-[220px] text-gray-200">
+              <h3 className="text-white mb-3 font-semibold text-base font-montserrat">Oficina Principal:</h3>
+              <ul className="space-y-2">
                 <li className="flex items-center">
                   <Phone size={18} className="text-[#6a5acd] mr-3 w-5 text-center flex-shrink-0" />
                   <span className="text-gray-200">+51 1 234 5678</span>
                 </li>
                 <li className="flex items-center">
                   <Mail size={18} className="text-[#6a5acd] mr-3 w-5 text-center flex-shrink-0" />
-                  <span className="text-gray-200">contacto@utec.edu.pe</span>
+                  <span className="text-gray-200">alerta@utec.edu.pe</span>
                 </li>
                 <li className="flex items-center">
                   <MapPin size={18} className="text-[#6a5acd] mr-3 w-5 text-center flex-shrink-0" />
-                  <span className="text-gray-200">Av. Javier Prado Este 4200, Santiago de Surco, Lima</span>
+                  <span className="text-gray-200">Jirón medrano silva 185, Barranco</span>
                 </li>
               </ul>
             </div>
-            <div className="min-w-[250px] text-gray-200">
-              <h3 className="text-white mb-5 font-semibold text-lg font-montserrat">Oficina de Soporte:</h3>
-              <ul className="space-y-3">
+            <div className="min-w-[220px] text-gray-200">
+              <h3 className="text-white mb-3 font-semibold text-base font-montserrat">Oficina de Soporte:</h3>
+              <ul className="space-y-2">
                 <li className="flex items-center">
                   <Phone size={18} className="text-[#6a5acd] mr-3 w-5 text-center flex-shrink-0" />
                   <span className="text-gray-200">+51 1 234 5679</span>
@@ -444,6 +447,8 @@ export const Login = () => {
             </div>
           </div>
         </div>
+        {/* Extensión del color del footer */}
+        <div className="w-full bg-[#3d3d5c] h-16"></div>
       </footer>
 
       {/* Modal de Registro */}

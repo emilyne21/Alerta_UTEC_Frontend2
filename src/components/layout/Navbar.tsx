@@ -47,7 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, onSearch }) => {
   };
 
   return (
-    <nav className="border-b px-4 py-3 flex items-center justify-between sticky top-0 z-40" style={{ backgroundColor: '#132436', borderColor: '#9C90FC' }}>
+    <nav className="border-b px-4 py-3 flex items-center justify-between sticky top-0 z-[60]" style={{ backgroundColor: '#132436', borderColor: '#9C90FC' }}>
       <div className="flex items-center gap-4 flex-1">
         <button
           onClick={onMenuClick}

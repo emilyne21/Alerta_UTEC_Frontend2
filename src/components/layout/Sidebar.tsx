@@ -31,7 +31,7 @@ const supervisorNavItems: NavItem[] = [
   { path: '/supervisor', label: 'Panel', icon: LayoutDashboard, roles: ['supervisor', 'admin'] },
   { path: '/supervisor/reportes', label: 'Reportes', icon: FileText, roles: ['supervisor', 'admin'] },
   { path: '/supervisor/usuarios', label: 'Usuarios', icon: Users, roles: ['supervisor', 'admin'] },
-  { path: '/supervisor/config', label: 'Configuración', icon: Settings, roles: ['supervisor', 'admin'] },
+  { path: '/supervisor/historial', label: 'Historial', icon: History, roles: ['supervisor', 'admin'] },
 ];
 
 const workerNavItems: NavItem[] = [
@@ -54,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Overlay para mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-[50] lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Sidebar */}
       <aside
         className={clsx(
-          'fixed lg:static inset-y-0 left-0 z-50 w-64 border-r transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col',
+          'fixed lg:static inset-y-0 left-0 z-30 w-64 border-r transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col',
           isOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         style={{ 
