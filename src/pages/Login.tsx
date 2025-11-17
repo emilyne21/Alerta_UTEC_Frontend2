@@ -156,13 +156,7 @@ export const Login = () => {
         registrationCode: registrationCode.trim(),
       };
 
-      console.log('Intentando registrar con datos:', { ...registerData, password: '***' });
-      console.log('URL completa será: /api/auth/register');
-      
       const response = await apiClient.post('/auth/register', registerData);
-      console.log('Respuesta del servidor:', response);
-      console.log('Status:', response.status);
-      console.log('Data:', response.data);
 
       // Si el registro es exitoso
       if (response.data) {
@@ -188,42 +182,25 @@ export const Login = () => {
         }, 5000);
       }
     } catch (err: any) {
-      console.error('=== ERROR EN REGISTRO ===');
-      console.error('Error completo:', err);
-      console.error('Error response:', err.response);
-      console.error('Error request:', err.request);
-      console.error('Error message:', err.message);
-      console.error('Error config:', err.config);
-      
       // Manejo de errores
       if (err.response) {
         const status = err.response.status;
-        const responseData = err.response.data;
-        const message = responseData?.message || responseData?.error || responseData?.msg || responseData?.mensaje || JSON.stringify(responseData);
-        
-        console.error(`Error HTTP ${status}:`, message);
-        console.error('Response data completo:', responseData);
+        const message = err.response.data?.message || err.response.data?.error || err.response.data?.msg || JSON.stringify(err.response.data);
         
         if (status === 400) {
           setError(message || 'Datos inválidos. Por favor verifica la información.');
         } else if (status === 401) {
-          setError(message || 'Código de registro inválido. Por favor verifica el código.');
+          setError('Código de registro inválido. Por favor verifica el código.');
         } else if (status === 409) {
-          setError(message || 'Este email ya está registrado. Por favor usa otro email o inicia sesión.');
-        } else if (status === 404) {
-          setError('El endpoint de registro no fue encontrado. Por favor contacta al administrador.');
+          setError('Este email ya está registrado. Por favor usa otro email o inicia sesión.');
         } else if (status >= 500) {
-          setError(message || 'Error del servidor. Por favor intenta más tarde.');
+          setError('Error del servidor. Por favor intenta más tarde.');
         } else {
           setError(message || `Error al registrar (${status}). Por favor intenta nuevamente.`);
         }
       } else if (err.request) {
-        console.error('No se recibió respuesta del servidor:', err.request);
-        console.error('Request URL:', err.config?.url);
-        console.error('Request baseURL:', err.config?.baseURL);
         setError('No se pudo conectar al servidor. Verifica tu conexión a internet y que el servidor esté funcionando.');
       } else {
-        console.error('Error al configurar la petición:', err.message);
         setError(`Error inesperado: ${err.message || 'Por favor intenta nuevamente.'}`);
       }
     } finally {

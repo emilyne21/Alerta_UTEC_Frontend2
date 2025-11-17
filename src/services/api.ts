@@ -5,12 +5,12 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'ax
  * Cliente de API configurado con Axios
  * 
  * Características:
- * - Base URL hardcodeada a '/api' para usar el proxy de Amplify
+ * - Base URL configurada desde variables de entorno
  * - Interceptor para añadir token JWT automáticamente
  * - Manejo de errores centralizado
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
   timeout: 30000, // 30 segundos
   headers: {
     'Content-Type': 'application/json',
@@ -28,12 +28,6 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
-    // Log para debugging
-    const fullUrl = `${config.baseURL}${config.url}`;
-    console.log(`[API Request] ${config.method?.toUpperCase()} ${fullUrl}`, {
-      hasToken: !!token,
-      data: config.data ? { ...config.data, password: config.data.password ? '***' : undefined } : undefined
-    });
     
     return config;
   },
@@ -56,17 +50,11 @@ apiClient.interceptors.response.use(
       const status = error.response.status;
       
       // Token expirado o inválido
-      // Solo redirigir si NO es una petición de registro o login
       if (status === 401) {
-        const url = error.config?.url || '';
-        const isAuthEndpoint = url.includes('/auth/register') || url.includes('/auth/login');
-        
-        if (!isAuthEndpoint) {
-          // Limpiar token y redirigir al login solo si no es un endpoint de autenticación
-          localStorage.removeItem('token');
-          localStorage.removeItem('authToken');
-          window.location.href = '/login';
-        }
+        // Limpiar token y redirigir al login
+        localStorage.removeItem('token');
+        localStorage.removeItem('authToken');
+        window.location.href = '/login';
       }
       
       // Error del servidor
