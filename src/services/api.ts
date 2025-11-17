@@ -5,12 +5,12 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from 'ax
  * Cliente de API configurado con Axios
  * 
  * Características:
- * - Base URL configurada desde variables de entorno
+ * - Base URL hardcodeada a '/api' para usar el proxy de Amplify
  * - Interceptor para añadir token JWT automáticamente
  * - Manejo de errores centralizado
  */
 const apiClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: '/api',
   timeout: 30000, // 30 segundos
   headers: {
     'Content-Type': 'application/json',
