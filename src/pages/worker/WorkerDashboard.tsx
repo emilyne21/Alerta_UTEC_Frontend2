@@ -3,14 +3,12 @@ import { useState, useMemo } from 'react';
 import { incidentes } from '@/mocks/incidentes';
 import { getCurrentUser } from '@/mocks/usuarios';
 import { Incident } from '@/utils/types';
-import { IncidentCard } from '@/components/incidents/IncidentCard';
 import { IncidentDetailPanel } from '@/components/incidents/IncidentDetailPanel';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, getDay, addMonths, subMonths } from 'date-fns';
 import es from 'date-fns/locale/es';
 import { 
   BookOpen, 
   CheckCircle, 
-  AlertCircle, 
   Search,
   Filter,
   Eye,
@@ -31,13 +29,6 @@ export const WorkerDashboard = () => {
   const myIncidents = useMemo(() => {
     return incidentes.filter((inc) => inc.atendidoPor === currentUser?.nombre);
   }, [currentUser]);
-
-  const pendientes = myIncidents.filter((inc) => inc.estado === 'pendiente' || inc.estado === 'en_proceso').length;
-  const nuevosHoy = myIncidents.filter((inc) => {
-    const hoy = new Date();
-    hoy.setHours(0, 0, 0, 0);
-    return inc.fechaReporte >= hoy;
-  }).length;
 
   // Calendario
   const monthStart = startOfMonth(currentDate);
@@ -172,19 +163,16 @@ export const WorkerDashboard = () => {
           {/* Días del calendario */}
           <div className="grid grid-cols-7 gap-1">
             {/* Días del mes anterior */}
-            {daysBeforeMonth.map((date) => {
-              const incidents = getIncidentsForDate(date);
-              return (
-                <div
-                  key={date.toISOString()}
-                  className="aspect-square p-1 text-gray-400 text-sm"
-                >
-                  <div className="h-full rounded-lg flex flex-col items-center justify-center">
-                    <span>{format(date, 'd')}</span>
-                  </div>
+            {daysBeforeMonth.map((date) => (
+              <div
+                key={date.toISOString()}
+                className="aspect-square p-1 text-gray-400 text-sm"
+              >
+                <div className="h-full rounded-lg flex flex-col items-center justify-center">
+                  <span>{format(date, 'd')}</span>
                 </div>
-              );
-            })}
+              </div>
+            ))}
             
             {/* Días del mes actual */}
             {daysInMonth.map((date) => {

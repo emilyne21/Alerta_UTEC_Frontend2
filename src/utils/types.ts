@@ -2,7 +2,7 @@
 
 export type UserRole = 'supervisor' | 'trabajador' | 'admin';
 
-export type WorkerArea = 'limpieza' | 'TI' | 'seguridad';
+export type WorkerArea = 'limpieza' | 'TI' | 'seguridad' | 'mantenimiento' | 'administracion';
 
 export type IncidentStatus = 'pendiente' | 'en_proceso' | 'resuelto' | 'rechazado' | 'aprobado';
 

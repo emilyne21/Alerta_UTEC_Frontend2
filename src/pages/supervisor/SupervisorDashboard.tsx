@@ -1,6 +1,5 @@
 // src/pages/supervisor/SupervisorDashboard.tsx
 import { useState, useMemo, useEffect } from 'react';
-import { reporteData } from '@/mocks/reportes';
 import { Incident } from '@/utils/types';
 import { SummaryCards } from '@/components/dashboard/SummaryCards';
 import { FiltersPanel, FilterState } from '@/components/dashboard/FiltersPanel';

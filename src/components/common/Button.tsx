@@ -32,12 +32,6 @@ export const Button: React.FC<ButtonProps> = ({
     backgroundColor: '#E05A29',
     '--tw-ring-color': '#E05A29',
   } as React.CSSProperties : {};
-  
-  const primaryHoverStyle = variant === 'primary' ? {
-    ':hover': {
-      backgroundColor: '#c94a1f',
-    }
-  } : {};
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',

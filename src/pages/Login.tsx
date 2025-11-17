@@ -1,10 +1,8 @@
 // src/pages/Login.tsx
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
 import { setCurrentUser } from '../mocks/usuarios';
-import { usuarios } from '../mocks/usuarios';
 import { AlertCircle, User, Shield, Sparkles, Lock, Wrench, Phone, Mail, MapPin, Loader2 } from 'lucide-react';
 import { UserRole, WorkerArea } from '../utils/types';
 import seguridadImage from '../assets/seguridad.png';
@@ -26,20 +24,6 @@ export const Login = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole>('trabajador');
   const [selectedArea, setSelectedArea] = useState<WorkerArea>('TI');
-  const navigate = useNavigate();
-
-  const handleQuickLogin = (userEmail: string) => {
-    const user = usuarios.find((u) => u.email === userEmail);
-    if (user) {
-      setCurrentUser(user);
-      // NOTE: En producción, aquí se haría la autenticación real
-      if (user.rol === 'supervisor' || user.rol === 'admin') {
-        navigate('/supervisor');
-      } else {
-        navigate('/trabajador');
-      }
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

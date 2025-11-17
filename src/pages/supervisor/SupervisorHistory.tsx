@@ -1,5 +1,5 @@
 // src/pages/supervisor/SupervisorHistory.tsx
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Incident, TimelineEvent } from '@/utils/types';
 import { IncidentTimeline } from '@/components/incidents/IncidentTimeline';
 import { EmptyState } from '@/components/common/EmptyState';
@@ -192,9 +192,9 @@ export const SupervisorHistory = () => {
         </div>
       ) : incidentes.length === 0 ? (
         <EmptyState
-          icon={FolderOpen}
+          icon={<FolderOpen />}
           title="No hay incidentes"
-          message="No hay incidentes registrados en el sistema"
+          description="No hay incidentes registrados en el sistema"
         />
       ) : (
         <div className="space-y-6">

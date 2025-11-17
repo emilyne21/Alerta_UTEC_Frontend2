@@ -85,6 +85,164 @@ Los colores están definidos en `tailwind.config.cjs`:
 - **Toast**: Notificaciones temporales
 - **Skeleton**: Estados de carga
 
+## 📖 Flujo de Uso de la Aplicación
+
+### 👨‍💼 Rol: Supervisor
+
+El supervisor tiene acceso completo al sistema para gestionar, supervisar y analizar todos los incidentes.
+
+#### 1. Inicio de Sesión
+- Acceder a la página de login
+- Ingresar credenciales (email y contraseña) o usar "Iniciar sesión con Google"
+- El sistema redirige automáticamente al Panel de Control del supervisor
+
+#### 2. Panel de Control (`/supervisor`)
+- **Vista General**: 
+  - Visualiza 3 KPIs principales: Incidentes Totales, Pendientes y Casos Críticos
+  - Los datos se cargan desde el endpoint `GET /incidentes` con query parameters opcionales
+- **Filtros**:
+  - Estado: pendiente, en_proceso, resuelto, rechazado
+  - Tipo: infraestructura, seguridad, software, hardware, red, otro
+  - Urgencia: baja, media, alta, critica
+  - Fechas: desde y hasta
+  - Búsqueda de texto: busca en título, descripción e ID
+- **Tabla de Incidentes**:
+  - Muestra todos los incidentes filtrados
+  - Paginación (10 incidentes por página)
+  - Acciones disponibles:
+    - **Ver detalle**: Abre panel lateral con información completa e historial
+    - **Aprobar/Rechazar**: Para incidentes pendientes
+    - **Enviar recordatorio**: Para incidentes en proceso
+- **Buscador Global**:
+  - Buscar en el navbar al lado de "Alerta UTEC"
+  - Busca por ID, título, descripción, ubicación, reportado por, asignado a
+  - Redirige a página de resultados o 404 si no encuentra nada
+
+#### 3. Reportes (`/supervisor/reportes`)
+- **KPIs en Tiempo Real**:
+  - Incidentes Totales, Pendientes, Casos Críticos
+  - Calculados desde datos reales del backend
+- **Gráficos de Distribución**:
+  - Distribución por Tipo: muestra cantidad de incidentes por cada tipo
+  - Distribución por Ubicación: top 10 ubicaciones con más incidentes
+  - Los gráficos se actualizan automáticamente con datos reales
+
+#### 4. Historial (`/supervisor/historial`)
+- **Lista de Incidentes**:
+  - Muestra todos los incidentes del sistema
+  - Cada incidente muestra: título, estado, urgencia, tipo, ubicación, fechas
+- **Ver Historial Completo**:
+  - Hacer clic en un incidente para expandirlo
+  - Se carga el historial desde `GET /incidentes/:id/historial`
+  - Muestra timeline completo con todos los eventos (creado, asignado, comentado, resuelto, etc.)
+- **Búsqueda y Filtrado**:
+  - Búsqueda de texto en tiempo real
+  - Filtros por estado, tipo, urgencia y fechas
+
+#### 5. Búsqueda Global
+- Usar el buscador en el navbar
+- Ingresar término de búsqueda (ID, título, descripción, etc.)
+- Ver resultados en página dedicada
+- Si no hay resultados, se muestra página 404
+
+---
+
+### 👷 Rol: Trabajador
+
+El trabajador gestiona los incidentes asignados a él y puede tomar nuevos casos de la cola de pendientes.
+
+#### 1. Inicio de Sesión
+- Acceder a la página de login
+- Ingresar credenciales (email y contraseña) o usar "Iniciar sesión con Google"
+- El sistema redirige automáticamente al Panel del Trabajador
+
+#### 2. Mi Panel (`/trabajador`)
+- **Panel de Bienvenida**:
+  - Saludo personalizado según la hora del día
+  - Descripción del sistema
+  - Enlace rápido a "Mis Casos"
+  - Imagen ilustrativa
+- **Calendario**:
+  - Vista mensual con incidentes marcados por fecha
+  - Navegación entre meses
+  - Leyenda de colores según urgencia
+  - Muestra incidentes asignados al trabajador
+- **Progreso de Incidentes**:
+  - Top 3 incidentes más recientes asignados
+  - Muestra estado, urgencia y tipo
+  - Enlace para ver detalles
+- **Guía de Uso**:
+  - 6 tarjetas con instrucciones sobre cómo usar el sistema
+  - Pasos claros para gestionar incidentes
+
+#### 3. Cola de Pendientes (`/trabajador/pendientes`)
+- **Vista de Incidentes Sin Asignar**:
+  - Muestra solo incidentes con estado "pendiente" y sin asignar
+  - Carga desde `GET /incidentes` y filtra en frontend
+- **Filtros Rápidos**:
+  - Por tipo y urgencia
+  - Búsqueda de texto
+- **Asignarse Casos**:
+  - Hacer clic en "Asignarme" en una tarjeta de incidente
+  - Confirmar la acción
+  - El incidente se asigna al trabajador actual
+  - Se actualiza la lista automáticamente
+
+#### 4. Mis Casos (`/trabajador/mis-casos`)
+- **Incidentes Asignados**:
+  - Muestra solo los incidentes asignados al trabajador actual
+  - Carga desde `GET /incidentes` y filtra por usuario
+- **Estados de Casos**:
+  - En Proceso: casos asignados y en trabajo
+  - Resueltos: casos completados
+  - Rechazados: casos rechazados por supervisor
+- **Acciones Disponibles**:
+  - **Ver Detalle**: Abre panel lateral con información completa
+  - **Marcar como Resuelto**: Para casos en proceso
+  - **Ver Historial**: Timeline completo del incidente
+- **Filtros**:
+  - Por estado, tipo, urgencia
+  - Búsqueda de texto
+
+#### 5. Historial (`/trabajador/historial`)
+- **Lista de Mis Incidentes**:
+  - Muestra todos los incidentes asignados al trabajador
+  - Carga desde `GET /incidentes` filtrado por usuario
+- **Ver Historial Completo**:
+  - Expandir un incidente haciendo clic en él
+  - Se carga el historial desde `GET /incidentes/:id/historial`
+  - Muestra todos los eventos del incidente en orden cronológico
+- **Filtros**:
+  - Por estado, tipo, urgencia
+  - Búsqueda de texto
+
+#### 6. Búsqueda Global
+- Usar el buscador en el navbar
+- Buscar incidentes por ID, título, descripción, etc.
+- Ver resultados o página 404 si no hay coincidencias
+
+---
+
+### 🔍 Búsqueda y Navegación
+
+Ambos roles tienen acceso al **buscador global** en el navbar:
+- Ubicado al lado del logo "Alerta UTEC"
+- Busca en todos los campos relevantes de los incidentes
+- Redirige a página de resultados (`/buscar?q=termino`)
+- Si no hay resultados, muestra página 404
+
+### ❌ Página 404
+
+Se muestra cuando:
+- No se encuentran resultados de búsqueda
+- Se accede a una ruta inexistente
+- Se busca sin término
+
+La página 404 incluye:
+- Mensaje claro de error
+- Botones para volver al panel correspondiente
+- Diseño consistente con el resto de la aplicación
+
 ## 🧪 Pruebas Manuales
 
 ### 1. Login y Navegación

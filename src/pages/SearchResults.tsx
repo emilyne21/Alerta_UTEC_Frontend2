@@ -1,17 +1,15 @@
 // src/pages/SearchResults.tsx
-import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Incident } from '@/utils/types';
 import { IncidentTable } from '@/components/incidents/IncidentTable';
 import { IncidentDetailPanel } from '@/components/incidents/IncidentDetailPanel';
-import { EmptyState } from '@/components/common/EmptyState';
-import { Search, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import apiClient from '@/services/api';
 import { NotFound } from './NotFound';
 
 export const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const query = searchParams.get('q') || '';
   
   const [incidentes, setIncidentes] = useState<Incident[]>([]);
