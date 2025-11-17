@@ -19,7 +19,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick, onSearch }) => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // NOTE: Aquí se integraría la búsqueda real
+    if (searchQuery.trim()) {
+      // Redirigir a la página de resultados de búsqueda
+      navigate(`/buscar?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
     onSearch?.(searchQuery);
   };
 

@@ -5,12 +5,13 @@ import { AppLayout } from './components/layout/AppLayout';
 import { Login } from './pages/Login';
 import { SupervisorDashboard } from './pages/supervisor/SupervisorDashboard';
 import { SupervisorReports } from './pages/supervisor/SupervisorReports';
-import { SupervisorUsers } from './pages/supervisor/SupervisorUsers';
 import { SupervisorHistory } from './pages/supervisor/SupervisorHistory';
 import { WorkerDashboard } from './pages/worker/WorkerDashboard';
 import { PendingQueue } from './pages/worker/PendingQueue';
 import { MyCases } from './pages/worker/MyCases';
 import { WorkerHistory } from './pages/worker/WorkerHistory';
+import { SearchResults } from './pages/SearchResults';
+import { NotFound } from './pages/NotFound';
 
 // Componente de protección de rutas
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -110,14 +111,6 @@ function App() {
           }
         />
         <Route
-          path="/supervisor/usuarios"
-          element={
-            <ProtectedRoute>
-              <SupervisorUsers />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/supervisor/historial"
           element={
             <ProtectedRoute>
@@ -160,9 +153,29 @@ function App() {
           }
         />
 
+        {/* Ruta de búsqueda */}
+        <Route
+          path="/buscar"
+          element={
+            <ProtectedRoute>
+              <SearchResults />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Ruta 404 */}
+        <Route
+          path="/404"
+          element={
+            <ProtectedRoute>
+              <NotFound />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Ruta por defecto */}
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

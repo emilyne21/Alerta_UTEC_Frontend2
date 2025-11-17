@@ -30,7 +30,6 @@ interface NavItem {
 const supervisorNavItems: NavItem[] = [
   { path: '/supervisor', label: 'Panel', icon: LayoutDashboard, roles: ['supervisor', 'admin'] },
   { path: '/supervisor/reportes', label: 'Reportes', icon: FileText, roles: ['supervisor', 'admin'] },
-  { path: '/supervisor/usuarios', label: 'Usuarios', icon: Users, roles: ['supervisor', 'admin'] },
   { path: '/supervisor/historial', label: 'Historial', icon: History, roles: ['supervisor', 'admin'] },
 ];
 

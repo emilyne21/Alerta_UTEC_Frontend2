@@ -130,14 +130,6 @@ export const SupervisorDashboard = () => {
   const kpis: KPI[] = useMemo(() => {
     const total = incidentes.length;
     const pendientes = incidentes.filter((inc) => inc.estado === 'pendiente').length;
-    const resueltos = incidentes.filter((inc) => inc.estado === 'resuelto');
-    const tiempoPromedio = resueltos.length > 0
-      ? Math.round(
-          resueltos
-            .filter((inc) => inc.tiempoResolucion)
-            .reduce((acc, inc) => acc + (inc.tiempoResolucion || 0), 0) / resueltos.length
-        )
-      : 0;
     const criticos = incidentes.filter((inc) => inc.urgencia === 'critica').length;
 
     return [
@@ -151,12 +143,6 @@ export const SupervisorDashboard = () => {
         label: 'Pendientes',
         value: pendientes,
         change: -2,
-        trend: 'down',
-      },
-      {
-        label: 'Tiempo Promedio',
-        value: tiempoPromedio > 0 ? `${tiempoPromedio} min` : 'N/A',
-        change: -10,
         trend: 'down',
       },
       {

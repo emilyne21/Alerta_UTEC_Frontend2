@@ -2,7 +2,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Incident, TimelineEvent } from '@/utils/types';
 import { IncidentTimeline } from '@/components/incidents/IncidentTimeline';
-import { FiltersPanel, FilterState } from '@/components/dashboard/FiltersPanel';
 import { EmptyState } from '@/components/common/EmptyState';
 import { StatusBadge, UrgencyBadge, TypeBadge } from '@/components/common/Badge';
 import { FolderOpen, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
@@ -14,7 +13,6 @@ export const SupervisorHistory = () => {
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
   const [incidentHistory, setIncidentHistory] = useState<Record<string, TimelineEvent[]>>({});
   const [loadingHistory, setLoadingHistory] = useState<Record<string, boolean>>({});
-  const [filters, setFilters] = useState<FilterState>({});
   const [incidentes, setIncidentes] = useState<Incident[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,31 +24,7 @@ export const SupervisorHistory = () => {
       setError(null);
       
       try {
-        // Construir query parameters basados en los filtros
-        const queryParams = new URLSearchParams();
-        
-        if (filters.estado) {
-          queryParams.append('estado', filters.estado);
-        }
-        if (filters.tipo) {
-          queryParams.append('tipo', filters.tipo);
-        }
-        if (filters.urgencia) {
-          queryParams.append('urgencia', filters.urgencia);
-        }
-        if (filters.fechaDesde) {
-          queryParams.append('fechaDesde', filters.fechaDesde);
-        }
-        if (filters.fechaHasta) {
-          queryParams.append('fechaHasta', filters.fechaHasta);
-        }
-        
-        // Construir la URL con query parameters
-        const url = queryParams.toString() 
-          ? `/incidentes?${queryParams.toString()}`
-          : '/incidentes';
-        
-        const response = await apiClient.get(url);
+        const response = await apiClient.get('/incidentes');
         
         // Verificar si la respuesta es un array o está dentro de un objeto
         let incidentsData = response.data;
@@ -122,24 +96,7 @@ export const SupervisorHistory = () => {
     };
 
     fetchIncidents();
-  }, [filters.estado, filters.tipo, filters.urgencia, filters.fechaDesde, filters.fechaHasta]);
-
-  // Filtrar incidentes por búsqueda de texto
-  const filteredIncidents = useMemo(() => {
-    let filtered = [...incidentes];
-
-    if (filters.busqueda) {
-      const query = filters.busqueda.toLowerCase();
-      filtered = filtered.filter(
-        (inc) =>
-          inc.titulo.toLowerCase().includes(query) ||
-          inc.descripcion.toLowerCase().includes(query) ||
-          inc.id.toLowerCase().includes(query)
-      );
-    }
-
-    return filtered;
-  }, [incidentes, filters.busqueda]);
+  }, []);
 
   // Función para cargar el historial de un incidente
   const handleToggleHistory = async (incidentId: string) => {
@@ -222,8 +179,6 @@ export const SupervisorHistory = () => {
         <p className="text-gray-600">Consulta el historial completo de todos los incidentes del sistema</p>
       </div>
 
-      <FiltersPanel onFilterChange={setFilters} />
-
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
@@ -235,19 +190,15 @@ export const SupervisorHistory = () => {
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-800">{error}</p>
         </div>
-      ) : filteredIncidents.length === 0 ? (
+      ) : incidentes.length === 0 ? (
         <EmptyState
           icon={FolderOpen}
           title="No hay incidentes"
-          message={
-            filters.busqueda || filters.estado || filters.tipo || filters.urgencia
-              ? 'No se encontraron incidentes con los filtros aplicados'
-              : 'No hay incidentes registrados en el sistema'
-          }
+          message="No hay incidentes registrados en el sistema"
         />
       ) : (
         <div className="space-y-6">
-          {filteredIncidents.map((incident) => (
+          {incidentes.map((incident) => (
             <div
               key={incident.id}
               className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
@@ -301,7 +252,7 @@ export const SupervisorHistory = () => {
                         <p className="text-gray-600 text-sm">Cargando historial...</p>
                       </div>
                     </div>
-                  ) : incidentHistory[incident.id] && incidentHistory[incident.id].length > 0 ? (
+                  ) : incidentHistory[incident.id] && Array.isArray(incidentHistory[incident.id]) && incidentHistory[incident.id].length > 0 ? (
                     <IncidentTimeline events={incidentHistory[incident.id]} />
                   ) : (
                     <div className="text-center py-8 text-gray-500">
