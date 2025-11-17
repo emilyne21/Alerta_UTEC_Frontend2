@@ -28,9 +28,17 @@ apiClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
+    // Log para debugging
+    const fullUrl = `${config.baseURL}${config.url}`;
+    console.log(`[API Request] ${config.method?.toUpperCase()} ${fullUrl}`, {
+      hasToken: !!token,
+      data: config.data ? { ...config.data, password: config.data.password ? '***' : undefined } : undefined
+    });
+    
     return config;
   },
   (error: AxiosError) => {
+    console.error('[API Request Error]', error);
     return Promise.reject(error);
   }
 );
@@ -48,11 +56,17 @@ apiClient.interceptors.response.use(
       const status = error.response.status;
       
       // Token expirado o inválido
+      // Solo redirigir si NO es una petición de registro o login
       if (status === 401) {
-        // Limpiar token y redirigir al login
-        localStorage.removeItem('token');
-        localStorage.removeItem('authToken');
-        window.location.href = '/login';
+        const url = error.config?.url || '';
+        const isAuthEndpoint = url.includes('/auth/register') || url.includes('/auth/login');
+        
+        if (!isAuthEndpoint) {
+          // Limpiar token y redirigir al login solo si no es un endpoint de autenticación
+          localStorage.removeItem('token');
+          localStorage.removeItem('authToken');
+          window.location.href = '/login';
+        }
       }
       
       // Error del servidor

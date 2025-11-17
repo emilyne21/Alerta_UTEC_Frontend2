@@ -10,6 +10,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://alerta-utec-alb-1269448375.us-east-1.elb.amazonaws.com',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        // Quita /api de la ruta, así /api/auth/register se convierte en /auth/register
+      },
+    },
+  },
 })
 
 

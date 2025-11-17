@@ -132,6 +132,91 @@ export const PendingQueue = () => {
     };
 
     fetchIncidents();
+    
+    // Recargar la lista cada 10 segundos para que otros trabajadores vean los cambios
+    const interval = setInterval(() => {
+      fetchIncidents();
+    }, 10000); // 10 segundos
+    
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Escuchar cuando alguien se asigna un caso para actualizar la lista
+  useEffect(() => {
+    const handleIncidentAssigned = (event: CustomEvent) => {
+      console.log('Evento incidentAssigned recibido:', event.detail);
+      // Recargar la lista de incidentes para reflejar los cambios
+      const fetchIncidents = async () => {
+        try {
+          const response = await apiClient.get('/incidentes');
+          
+          let incidentsData = response.data;
+          if (!Array.isArray(incidentsData)) {
+            if (incidentsData.data && Array.isArray(incidentsData.data)) {
+              incidentsData = incidentsData.data;
+            } else if (incidentsData.incidentes && Array.isArray(incidentsData.incidentes)) {
+              incidentsData = incidentsData.incidentes;
+            } else if (incidentsData.incidents && Array.isArray(incidentsData.incidents)) {
+              incidentsData = incidentsData.incidents;
+            } else {
+              return;
+            }
+          }
+          
+          const incidents = incidentsData.map((inc: any, index: number) => {
+            try {
+              return {
+                id: inc.id || inc._id || `inc-${index}-${Date.now()}`,
+                titulo: inc.titulo || inc.title || inc.descripcion || inc.description || '',
+                descripcion: inc.descripcion || inc.description || '',
+                tipo: (inc.tipo || inc.type || 'otro') as Incident['tipo'],
+                urgencia: (inc.urgencia || inc.urgency || 'media') as Incident['urgencia'],
+                estado: (() => {
+                  const estado = inc.estado || inc.status || 'pendiente';
+                  if (estado === 'en_atencion') {
+                    return 'en_proceso' as Incident['estado'];
+                  }
+                  return estado as Incident['estado'];
+                })(),
+                ubicacion: inc.ubicacion || inc.location || '',
+                reportadoPor: inc.reportadoPor || inc.reportedBy || inc.reportado_por || '',
+                atendidoPor: (() => {
+                  const assigned = inc.atendidoPor || inc.asignadoA || inc.assignedTo || inc.asignado_a;
+                  if (!assigned || assigned === 'NO ASIGNADO' || assigned.trim() === '') {
+                    return undefined;
+                  }
+                  return assigned;
+                })(),
+                fechaReporte: inc.fechaReporte ? new Date(inc.fechaReporte) : new Date(inc.fecha_reporte || inc.createdAt || inc.created_at || Date.now()),
+                fechaActualizacion: inc.fechaActualizacion ? new Date(inc.fechaActualizacion) : new Date(inc.fecha_actualizacion || inc.updatedAt || inc.updated_at || Date.now()),
+                fechaResolucion: inc.fechaResolucion ? new Date(inc.fechaResolucion) : (inc.fecha_resolucion || inc.resolvedAt || inc.resolved_at ? new Date(inc.fecha_resolucion || inc.resolvedAt || inc.resolved_at) : undefined),
+                comentarios: inc.comentarios || inc.comments || [],
+                evidencias: inc.evidencias || inc.evidence || [],
+                tiempoResolucion: inc.tiempoResolucion || inc.resolutionTime || undefined,
+              };
+            } catch (mapError) {
+              console.error(`Error mapping incident at index ${index}:`, mapError, inc);
+              return null;
+            }
+          }).filter((inc: Incident | null) => inc !== null) as Incident[];
+          
+          setIncidentes(incidents);
+          console.log('Lista de incidentes actualizada después de asignación');
+        } catch (err) {
+          console.error('Error al recargar incidentes después de asignación:', err);
+        }
+      };
+      
+      fetchIncidents();
+    };
+
+    window.addEventListener('incidentAssigned', handleIncidentAssigned as EventListener);
+    
+    return () => {
+      window.removeEventListener('incidentAssigned', handleIncidentAssigned as EventListener);
+    };
   }, []);
 
   // Filtrar incidentes pendientes y sin asignar (por defecto)
